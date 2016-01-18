@@ -3334,14 +3334,6 @@ ReplicatedPG::OpContextUPtr ReplicatedPG::trim_object(const hobject_t &coid)
 	snapset_obc)) {
     close_op_ctx(ctx.release());
     dout(10) << __func__ << ": Unable to get a wlock on " << snapoid << dendl;
-    list<OpRequestRef> to_wake;
-    bool requeue_recovery = false;
-    bool requeue_snaptrimmer = false;
-    ctx->lock_manager.put_locks(
-      &to_wake, &requeue_recovery, &requeue_snaptrimmer);
-    assert(to_wake.empty());
-    assert(!requeue_recovery);
-    assert(!requeue_snaptrimmer);
     return NULL;
   }
 
