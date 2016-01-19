@@ -8083,8 +8083,10 @@ int ReplicatedPG::try_flush_mark_clean(FlushOpRef fop)
     return -ECANCELED;
   }
 
-  ctx->register_on_finish(*(fop->on_flush));
-  fop->on_flush = boost::none;
+  if (fop->on_flush) {
+    ctx->register_on_finish(*(fop->on_flush));
+    fop->on_flush = boost::none;
+  }
 
   ctx->at_version = get_next_version();
 
