@@ -3758,6 +3758,9 @@ public:
   ObcLockManager() = default;
   ObcLockManager(ObcLockManager &&) = default;
   ObcLockManager(const ObcLockManager &) = delete;
+  bool empty() const {
+    return locks.empty();
+  }
   bool get_lock_type(
     ObjectContext::RWState::State type,
     const hobject_t &hoid,

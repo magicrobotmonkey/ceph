@@ -803,7 +803,11 @@ protected:
    * @param ctx [in] ctx to clean up
    */
   void close_op_ctx(OpContext *ctx) {
-    release_object_locks(ctx->obc->obs.oi.soid.get_head(), ctx->lock_manager);
+    if (!ctx->lock_manager.empty()) {
+      // hack to work around complete_read_ctx can pass a ctx without an obc
+      assert(ctx->obc);
+      release_object_locks(ctx->obc->obs.oi.soid.get_head(), ctx->lock_manager);
+    }
     ctx->op_t.reset();
     for (auto p = ctx->on_finish.begin();
 	 p != ctx->on_finish.end();
